@@ -29,9 +29,3 @@ ros2 run rm_week1_pubsub subscriber_node
 ```bash
 ros2 run rm_week1_pubsub publisher_node
 ```
-
-订阅端应持续显示类似下面的日志；请在实际运行后截取该终端，作为任务提交演示图。
-
-```text
-[INFO] [subscriber_node]: Received: 'RoboMaster ROS 2 training message #0'
-```
