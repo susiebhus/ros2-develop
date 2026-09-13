@@ -1,44 +1,89 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+// .devcontainer/devcontainer.json
 {
-	"name": "rmcs-develop",
-	"image": "qzhhhi/rmcs-develop:latest",
-	"privileged": true,
-	"mounts": [
-		{
-			"source": "/dev",
-			"target": "/dev",
-			"type": "bind"
-		},
-		{
-			"source": "/tmp/.X11-unix",
-			"target": "/tmp/.X11-unix",
-			"type": "bind"
-		}
-	],
-	"containerEnv": {
-		"DISPLAY": "${localEnv:DISPLAY}"
-	},
-	"runArgs": [
-		"--network",
-		"host"
-	],
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				// C++ language support
-				"llvm-vs-code-extensions.vscode-clangd",
-				// Python language support
-				"ms-python.vscode-pylance",
-				"ms-python.python",
-				"ms-python.debugpy",
-				// CMake language support
-				"twxs.cmake",
-				// Code spell checking
-				"streetsidesoftware.code-spell-checker",
-				// Git enhancements
-				"mhutchie.git-graph"
-			]
-		}
-	}
+    "name": "rmcs-develop",
+
+    // RoboMaster / ROS2 开发镜像
+    "image": "qzhhhi/rmcs-develop:latest",
+
+    // RM 后续可能涉及串口、CAN、USB 等设备，
+    // 先保留 privileged 权限
+    "privileged": true,
+
+    // 容器环境变量
+    "containerEnv": {
+        // ROS2 允许与其他主机通信
+        "ROS_LOCALHOST_ONLY": "0",
+
+        // ROS2 日志启用彩色输出
+        "RCUTILS_COLORIZED_OUTPUT": "1"
+    },
+
+    // VS Code 配置
+    "customizations": {
+        "vscode": {
+
+            "settings": {
+                // clangd 作为 C/C++ Language Server
+                "C_Cpp.intelliSenseEngine": "disabled",
+
+                "clangd.arguments": [
+                    "--background-index",
+                    "--clang-tidy",
+                    "--completion-style=detailed",
+                    "--header-insertion=never"
+                ],
+
+                // 不要每次打开目录自动跑 CMake
+                "cmake.configureOnOpen": false,
+
+                // Python
+                "python.analysis.autoImportCompletions": true,
+
+                // 终端
+                "terminal.integrated.defaultProfile.linux": "bash"
+            },
+
+            "extensions": [
+                // ====================
+                // C / C++
+                // ====================
+
+                // clangd
+                "llvm-vs-code-extensions.vscode-clangd",
+
+                // CMake
+                "ms-vscode.cmake-tools",
+
+                // CMake 语法高亮
+                "twxs.cmake",
+
+                // ====================
+                // Python
+                // ====================
+
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.debugpy",
+
+                // ====================
+                // ROS
+                // ====================
+
+                "ms-iot.vscode-ros",
+
+                // ====================
+                // Git
+                // ====================
+
+                "mhutchie.git-graph",
+
+                // ====================
+                // 其他
+                // ====================
+
+                // 拼写检查
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    }
 }
